@@ -55,6 +55,8 @@ namespace GameNetwork_1
             // 7. ipv4를 ipv6로 변환
             IPAddress ipv6 = ip3.MapToIPv6();
             Console.WriteLine("7. ipv6로 변환 : " + ipv6);
+
+            //테스트용
         }
     }
 }
