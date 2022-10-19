@@ -4,24 +4,33 @@ using System.Net.Sockets;
 
 namespace GameNetwork_1
 {
+    /**
+     * IP를 표현하는 방식이 
+     * 1) 문자열
+     * 2) 바이트배열
+     * 3) long값
+     * 으로 표현 가능하다.
+     */
     internal class Program
     {
         static void Main(string[] args)
         {
             // 자신의 아이피 아는 방법
             // 1. 호스트 / 도메인명에서 IP알아내기
-            IPHostEntry hostEntry = Dns.GetHostEntry("www.naver.com");
+            IPHostEntry hostEntry_naver = Dns.GetHostEntry("www.naver.com");
             IPHostEntry hostEntry_google = Dns.GetHostEntry("www.google.com");
 
-            Console.WriteLine(hostEntry_google.HostName);
-            foreach (IPAddress item in hostEntry_google.AddressList)
+            //Console.WriteLine(hostEntry_google.HostName);
+            //foreach (IPAddress item in hostEntry_google.AddressList)
+            Console.WriteLine(hostEntry_naver.HostName);
+            foreach (IPAddress item in hostEntry_naver.AddressList)
             {
                 Console.WriteLine(item);
             }
 
             Console.WriteLine();
             // 2. 로컬 호스트명 정보 얻기
-            string hostName = Dns.GetHostName();
+            string hostName = Dns.GetHostName();    // 자기 자신의 이름
             Console.WriteLine("호스트명(인터넷상에서의 내 PC이름) :" + hostName);
             IPHostEntry localHost = Dns.GetHostEntry(hostName);
             foreach (IPAddress item in localHost.AddressList)
@@ -39,22 +48,23 @@ namespace GameNetwork_1
             // 4. ip를 byte배열로 표현 - 생성자로 바로 변환
             byte[] byIP = new byte[] { 172, 30, 1, 16 };
             IPAddress ip2 = new IPAddress(byIP);
-            Console.WriteLine("4. ip를 byte 배열로 표현 :" + ip2);
+            Console.WriteLine("2. ip를 byte 배열로 표현 :" + ip2);
 
             // 5. 바이트 배열을 long값으로 표현
             uint IAddress = BitConverter.ToUInt32(byIP, 0);
-            Console.WriteLine("ip를 long값으로 표현 : " + IAddress);
+            Console.WriteLine("3. ip를 long값으로 표현 : " + IAddress);
             IPAddress ip3 = new IPAddress((long)IAddress);
-            Console.WriteLine("5. 바이트배열을 Long으로 변환 후 다시 IP : " + ip3);
+            Console.WriteLine("3-1. 바이트배열을 Long으로 변환 후 다시 IP : " + ip3);
 
             // 6. 바이트로 분리
             byte[] b3 = ip3.GetAddressBytes();
             string strIP = string.Format("{0}.{1}.{2}.{3}", b3[0], b3[1], b3[2], b3[3]);
-            Console.WriteLine("6. 바이트분리(추출한IP) : " + strIP);
+
+            Console.WriteLine("4. 바이트분리(추출한IP) : " + strIP);
 
             // 7. ipv4를 ipv6로 변환
             IPAddress ipv6 = ip3.MapToIPv6();
-            Console.WriteLine("7. ipv6로 변환 : " + ipv6);
+            Console.WriteLine("5. ipv6로 변환 : " + ipv6);
 
             //테스트용
         }
