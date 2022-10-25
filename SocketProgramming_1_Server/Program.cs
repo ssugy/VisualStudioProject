@@ -7,8 +7,8 @@ namespace SocketProgramming_1_Server
     internal class Program
     {
         static Socket listenSock;
-        static string strIP = "172.30.1.16";
-        //static string strIP = "127.0.0.1";
+        //static string strIP = "172.30.1.16";
+        static string strIP = "127.0.0.1";
         static int port = 8082;
 
         // 접속한 유저를 리스트에 저장하기

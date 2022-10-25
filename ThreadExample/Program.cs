@@ -4,40 +4,32 @@ namespace ThreadExample
 {
     internal class Program
     {
-        static Thread t1;
+
         static void Main(string[] args)
         {
-            // 이렇게 ThreadStart는 델리게이트 변수로, 스레드들을 모아서 한번에 실행 할 수 있다.
-            ThreadStart threadStart = new ThreadStart(NewClient);
-            t1 = new Thread(threadStart);
-            t1.Start();
-
-            int count = 0;
-            while (count < 1000)
+			try
+			{
+				// 1. 에러 발생 -> catch -> 크리티컬 한게 아니면 그대로 쭉 실행 시킬 수 있다.
+				Console.WriteLine("트라이문 실행");
+                int[] arr = new int[10];
+                int b = arr[0] / 0;
+            }
+			catch (NullReferenceException e)
+			{
+                // 2. 어떤 에러가 발생할 때 넣어줄까???
+                Console.WriteLine($"1 캐치 실행 {e.Message}");
+            }
+            catch (DivideByZeroException e)
             {
-                count++;
-                Console.WriteLine($"Main함수 {count}");
+                Console.WriteLine($"2 캐치 실행 {e.Message}");
+            }
+			finally
+			{
+                // 무.조.건. 실행 된다.
+                Console.WriteLine("파이널리 실행");
             }
 
-            // 2. Join - 조인이면, t1 스레드가 멈출 때 까지 아래 용을 실행시키지 않는다.
-            // 강사님 첨언 : 우선 Join을 하려면, sleep이 존재해야 한다. (잠들 때 조인함)
-            // 여기서 join을 사용한 이유는, join-interrupt의 연속적인 사용이 스레드 종료되는 안전한 방법이라고 알고계심.
-            t1.Join();
-            Console.WriteLine("Join");
-
-            // 3. Interrup - Thread를 안전하게 종료시키기 위한 코드.
-            t1.Interrupt();
-            Console.WriteLine("인터럽트 발생");   
-        }
-
-        private static void NewClient()
-        {
-            int threadCount = 0;
-            while (threadCount < 300)
-            {
-                Console.WriteLine($"Thread Test {threadCount++}");
-                Thread.Sleep(10);
-            }
+            Console.WriteLine("트라이문 뒤에 실행 할 일 들");
         }
     }
 }
