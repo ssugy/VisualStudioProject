@@ -7,8 +7,8 @@ namespace SocketProgramming_1_Client
     internal class Program
     {
         static Socket clientSocket;
-        static string serverIP = "172.30.1.16";
-        //static string serverIP = "127.0.0.1";
+        //static string serverIP = "172.30.1.16";
+        static string serverIP = "127.0.0.1";
         static int port = 8082;
         static void Main(string[] args)
         {
