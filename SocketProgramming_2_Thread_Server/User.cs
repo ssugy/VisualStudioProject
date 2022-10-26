@@ -26,7 +26,11 @@ public class User
         //유저마다 스레드 만들기
         ThreadStart threadStart = new ThreadStart(NewClient);
         t = new Thread(threadStart);
-        t.Start();
+        t.Start();  // 여기에서 어차피 무한루프로 돌고 있기 때문에 바로 조인/인터럽트로 넘어가지 않음.
+
+        //t.Join();   // 정상적으로 스레드를 종료하기 위한 코드
+        //t.Interrupt();
+        //Console.WriteLine("test");
     }
 
     public void NewClient()
@@ -46,6 +50,10 @@ public class User
         {
             // 연결이 끊어지면 - 이거 서버측 화면에서 작동한다.
             Close();
+
+            Console.WriteLine("스레드 종료 코드 실행");
+            t.Join();   // 스레드 종료하기
+            t.Interrupt();  // 이렇게 해야지 스레드 정상종료 될 것이라고 봄. 인터럽트 이후에는 아무것도 실행 안된다.
         }
 
     }

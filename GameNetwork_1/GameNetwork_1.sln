@@ -19,9 +19,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SocketProgramming_2_Thread_
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SocketProgramming_2_Thread_Client", "..\SocketProgramming_2_Thread_Client\SocketProgramming_2_Thread_Client.csproj", "{52ADE078-78A4-465C-8E65-2FBE042ED431}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestGround", "..\TestGround\TestGround.csproj", "{8888496F-57AD-425C-BD44-6BB0BE8739CA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TestGround", "..\TestGround\TestGround.csproj", "{8888496F-57AD-425C-BD44-6BB0BE8739CA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestGround_1", "..\TestGround_1\TestGround_1.csproj", "{7A84D450-A02F-42C9-893D-4413A88B6022}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TestGround_1", "..\TestGround_1\TestGround_1.csproj", "{7A84D450-A02F-42C9-893D-4413A88B6022}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SocketProgramming_3_Asnc_Server", "..\SocketProgramming_3_Asnc_Server\SocketProgramming_3_Asnc_Server.csproj", "{7B6E99C3-E53F-4729-A042-F46A67B8DBD0}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -69,6 +71,10 @@ Global
 		{7A84D450-A02F-42C9-893D-4413A88B6022}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7A84D450-A02F-42C9-893D-4413A88B6022}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7A84D450-A02F-42C9-893D-4413A88B6022}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7B6E99C3-E53F-4729-A042-F46A67B8DBD0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7B6E99C3-E53F-4729-A042-F46A67B8DBD0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7B6E99C3-E53F-4729-A042-F46A67B8DBD0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7B6E99C3-E53F-4729-A042-F46A67B8DBD0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
