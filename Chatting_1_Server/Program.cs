@@ -46,7 +46,7 @@ namespace Chatting_1_Server
             }
         }
 
-        public enum PACKET
+        public enum PACKETTYPE
         {
             eWELCOME = 1000,
             eCHATUSERS, // 일반 문자 보낼 때
@@ -70,14 +70,14 @@ namespace Chatting_1_Server
         static void WelcomePacket(User _user)
         {
             // eWelcome
-            byte[] _Packet = BitConverter.GetBytes((ushort)PACKET.eWELCOME);
+            byte[] _Packet = BitConverter.GetBytes((ushort)PACKETTYPE.eWELCOME);
             byte[] _uid = BitConverter.GetBytes((int)_user.userSocket.Handle);
             byte[] _message = Encoding.Default.GetBytes("안녕하세요");
             // 버퍼에 복사
             Array.Copy(_Packet, 0, _user.sendBuffer, 0, _Packet.Length);
             Array.Copy(_uid, 0, _user.sendBuffer, 2, _uid.Length);
             Array.Copy(_message, 0, _user.sendBuffer, 6, _message.Length);
-            _user.SendSyncronous(); // 동기로 보내기
+            _user.SendSyncronous(); // 동기로 보내기 -> 안녕하세요 보내지게 됨.
             _user.ClearBuffer();
         }
 
@@ -85,7 +85,7 @@ namespace Chatting_1_Server
         static void SendCharcters(User user)
         {
             // eWelcome
-            byte[] _Packet = BitConverter.GetBytes((ushort)PACKET.eCHATUSERS);
+            byte[] _Packet = BitConverter.GetBytes((ushort)PACKETTYPE.eCHATUSERS);
             byte[] _uid = BitConverter.GetBytes((int)user.userSocket.Handle);
             // 버퍼에 복사
             Array.Copy(_Packet, 0, user.sendBuffer, 0, _Packet.Length);
@@ -100,20 +100,34 @@ namespace Chatting_1_Server
          */
         static void SendUserInfos(User _user)
         {
+            _user.ClearBuffer();
             // 1. 접속한 유저에게 다른 사람 정보를 전송해준다.
-            // 2. 다른 유저에게 현재 접속한 사람을 전송 - 이거 나중에 처리
             // 다른사람정보를 보낼 때 까지는 동기방식으로 보내라 -> 왜인지 정확히 모름.
             foreach (User client in userList)
             {
                 // eWelcome
-                byte[] _Packet = BitConverter.GetBytes((ushort)PACKET.eUSERINFO);
+                byte[] _packettype = BitConverter.GetBytes((ushort)PACKETTYPE.eUSERINFO);
                 byte[] _uid = BitConverter.GetBytes((int)client.userSocket.Handle);
                 // 버퍼에 복사
-                Array.Copy(_Packet, 0, _user.sendBuffer, 0, _Packet.Length);
+                Array.Copy(_packettype, 0, _user.sendBuffer, 0, _packettype.Length);
                 Array.Copy(_uid, 0, _user.sendBuffer, 2, _uid.Length);
                 _user.SendSyncronous();
-                _user.ClearBuffer();
             }
+
+            /**
+             * 마지막 부분은 제대로 쫓아가지 못하고 들었기 때문에, 이건 처음부터 다시 시작해야된다.
+             * 여기 프로젝트는 정상적으로 작동하지 못하는 상태로 우선 스톱하고 다시 처음부터 올라가보겠다.
+             */
+            // 2. 다른 유저에게 현재 접속한 사람을 전송 - 이거 나중에 처리
+            //foreach (User one in userList)
+            //{
+            //    byte[] _packettype = BitConverter.GetBytes((ushort)PACKETTYPE.eUSERINFO);
+            //    byte[] _uid = BitConverter.GetBytes((int)_user.userSocket.Handle);
+            //    // 버퍼에 복사
+            //    Array.Copy(_packettype, 0, one.sendBuffer, 0, _packettype.Length);
+            //    Array.Copy(_uid, 0, one.sendBuffer, 2, _uid.Length);
+            //    one.SendSyncronous();
+            //}
         }
 
         private static void AccetpCallback(IAsyncResult ar)
@@ -124,7 +138,7 @@ namespace Chatting_1_Server
             userList.Add(user);
 
             // 안녕하세요 메시지 보내기
-            WelcomePacket(user);    // 여기서 send처리함(패킷을 만들고 send함)
+            WelcomePacket(user);    // 동기방식으로 "안녕하세요" 보냄. -> 거기서 끝
             SendUserInfos(user);
             user.Receive();
         }
