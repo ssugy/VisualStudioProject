@@ -6,6 +6,7 @@ namespace SocketProgramming_3_Asnc_Server
 {
     /// <summary>
     /// 클라이언트는 2_Thread_Client 그대로 사용 예정
+    /// 유저를 구분하는 방법 : 소켓의 핸들로 구분한다.(소켓의 고유한 번호 = 핸들)
     /// </summary>
     internal class Program
     {
@@ -41,42 +42,57 @@ namespace SocketProgramming_3_Asnc_Server
         // 비동기로 구현
         static void NewClient()
         {
+            Console.WriteLine("유저 대기중..");  // 이거 이제 계속 나올 것 같은데..? 이거 이제 계속 체크함. 10ms마다 반복됨
             while (true)
             {
-                Console.WriteLine("유저 대기중..");  // 이거 이제 계속 나올 것 같은데..? 이거 이제 계속 체크함. 10ms마다 반복됨
-                listenSock.BeginAccept(AcceptCallBack, null);   // 마지막에 넣는것이 콜백함수의 파라미터임.
-                Thread.Sleep(1000);
+                listenSock.BeginAccept(AcceptCallBack, null);  // 마지막에 넣는것이 콜백함수의 파라미터임.
+                Thread.Sleep(10);
             }
         }
 
         private static void AcceptCallBack(IAsyncResult ar)
         {
             Socket userSock = listenSock.EndAccept(ar); // 이게 Accept리턴값과 같음
-            Console.WriteLine($"클라이언트 접속 : {userSock.RemoteEndPoint}");
+            Console.WriteLine($"클라이언트 접속 : {userSock.RemoteEndPoint} // ID : {userSock.Handle}");
 
             // 안녕하세요 보내주기
             string message = "안녕하세요";
             byte[] sendBuffer = Encoding.Default.GetBytes(message);
+
+            // user클래스 
             userSock.Send(sendBuffer);
-            userSock.BeginReceive(receiveBuffer, 0, receiveBuffer.Length,SocketFlags.None, ReceiveCallBack, userSock);  //마지막에 넣는 것은 콜백함수의 파라미터.
+            User user = new User(userSock);
+            user.Receive();
             Thread.Sleep(10);
         }
 
-        private static void ReceiveCallBack(IAsyncResult ar)
+        public static void ReceiveCallBack(IAsyncResult ar)
         {
-            Socket userSock = ar.AsyncState as Socket;  // 이렇게 하는게 오브젝트를 넘겨서 받는 방법.
-            Array.Copy(receiveBuffer, sendBuffer, receiveBuffer.Length);
-            Array.Clear(receiveBuffer);
-            userSock.BeginSend(sendBuffer, 0, sendBuffer.Length, SocketFlags.None, SendCallBack, userSock);
+            User user = (User)ar.AsyncState;
+            try
+            {
+                user.CopySendBufferFromReceiveBuffer();
+                user.Send();
+            }
+            catch (Exception)
+            {
+                user.Close();
+            }
         }
 
         // 보내고 난 뒤에, 다시 리시브 상태로 변경
-        private static void SendCallBack(IAsyncResult ar)
+        public static void SendCallBack(IAsyncResult ar)
         {
-            Socket userSock = ar.AsyncState as Socket;
-            int sendLength = userSock.EndSend(ar);  //보내고 난뒤, 크기가 얼마인 데이터를 보냈는지 확인 가능
-            Array.Clear(sendBuffer);    // send버퍼 초기화
-            userSock.BeginReceive(receiveBuffer, 0, receiveBuffer.Length, SocketFlags.None, ReceiveCallBack, userSock);
+            User user = (User)ar.AsyncState;
+            try
+            {
+                user.ClearSendBuffer();
+                user.Receive();
+            }
+            catch (Exception)
+            {
+                user.Close();
+            }
         }
     }
 }

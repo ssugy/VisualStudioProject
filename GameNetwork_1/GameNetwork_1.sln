@@ -27,6 +27,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SocketProgramming_3_Asnc_Se
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataStructure", "..\DataStructure\DataStructure.csproj", "{0F9B1303-E4D4-45E8-9218-F566B7501CD5}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chatting_1_Client", "..\Chatting_1_Client\Chatting_1_Client.csproj", "{3FA77B50-16FF-48EF-9EAE-6C6704C39504}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chatting_1_Server", "..\Chatting_1_Server\Chatting_1_Server.csproj", "{33A739C9-0AD6-4309-B6EA-9375F1D3820D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -81,6 +85,14 @@ Global
 		{0F9B1303-E4D4-45E8-9218-F566B7501CD5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0F9B1303-E4D4-45E8-9218-F566B7501CD5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0F9B1303-E4D4-45E8-9218-F566B7501CD5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3FA77B50-16FF-48EF-9EAE-6C6704C39504}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3FA77B50-16FF-48EF-9EAE-6C6704C39504}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3FA77B50-16FF-48EF-9EAE-6C6704C39504}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3FA77B50-16FF-48EF-9EAE-6C6704C39504}.Release|Any CPU.Build.0 = Release|Any CPU
+		{33A739C9-0AD6-4309-B6EA-9375F1D3820D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{33A739C9-0AD6-4309-B6EA-9375F1D3820D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{33A739C9-0AD6-4309-B6EA-9375F1D3820D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{33A739C9-0AD6-4309-B6EA-9375F1D3820D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
