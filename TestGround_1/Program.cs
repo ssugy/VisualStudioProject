@@ -4,7 +4,7 @@ using System.Text;
 
 /**
  * 채팅서버를 구현하자
- * 1. 1:1 server-client 관계 구현
+ * 1. 1:1 server-client 관계 구현 - 여기 완료
  * 2. 1:N server-client 관계 구현
  * 3. 클라이언트 삭제 시 정상적인 접속 종료 및 리스트 제거
  * 4. 비동기 함수를 활용
@@ -29,30 +29,10 @@ namespace TestGround_Server
 {
     internal class Program
     {
-        static Socket serverSocket;
-        static string strIP = "127.0.0.1";
-        static int port = 8082;
 
         static void Main(string[] args)
         {
-            serverSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-            IPEndPoint endPoint = new IPEndPoint(IPAddress.Parse(strIP), port);
-            serverSocket.Bind(endPoint);
-            serverSocket.Listen(100);
-
-            while (true)
-            {
-                Console.WriteLine("클라이언트 접속 대기 중");
-                Socket clientSocket = serverSocket.Accept();  // 동기 : Accept, 비동기 : BeginAccept - 막을 수 있는 이유가 머에요? : 동기함수라서 그렇다. => 비동기함수면 되나? 예.
-                Console.WriteLine($"클라이언트 접속 완료 : {clientSocket.RemoteEndPoint}"); 
-
-                // 안녕하세요를 보내고 싶을 때
-                byte[] sendBuffer = new byte[128];
-                string message = "안녕하세요";
-                sendBuffer = Encoding.Default.GetBytes(message);
-                clientSocket.Send(sendBuffer);  // 동기함수 -> 보내는 양이 너무 많아. -> 보내는 시간이 1시간이 넘게 걸릴 수 있다.
-                Console.WriteLine("여기는 실행되나요?");    // 1시간 뒤에 실행. 왜? 다보내고 실행되서. 
-            }
+            
         }
     }
 }
