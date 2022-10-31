@@ -1,78 +1,81 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net.Sockets;
 using System.Text;
 using System.Threading.Tasks;
-
-public class User
+using System.Net.Sockets;
+using System.Threading;
+using ChattingServer_1;
+namespace UserInfo
 {
-    public Socket userSocket;
-    public byte[] sendBuffer;
-    public byte[] receiveBuffer;
-    private const short MAXBUFSIZE = 128;
-
-    public User(Socket _sock)
+    class User
     {
-        userSocket = _sock;
-        sendBuffer = new byte[MAXBUFSIZE];
-        receiveBuffer = new byte[MAXBUFSIZE];
-    }
-
-    public void Close()
-    {
-        try
+        // 소켓
+        // 송신버퍼
+        // 수신버퍼
+        public Socket userSock;
+        public int sockHandle;
+        public byte[] sendBuffer;
+        public byte[] receiveBuffer;
+        private const short MAXBUFSIZE = 128;
+        public User(int _sockHandle)
         {
-            Console.WriteLine($"{userSocket.RemoteEndPoint}님이 접속을 종료하였습니다.");
-            
-            userSocket.Shutdown(SocketShutdown.Both);
-            userSocket.Close();
+            sockHandle = _sockHandle;
+            sendBuffer = new byte[MAXBUFSIZE];
+            receiveBuffer = new byte[MAXBUFSIZE];
         }
-        catch (SocketException)
+        public User(Socket _sock)
         {
-            //userSocket.Close();
-            Console.WriteLine("test");
+            userSock = _sock;
+            sendBuffer = new byte[MAXBUFSIZE];
+            receiveBuffer = new byte[MAXBUFSIZE];
         }
-        catch (ObjectDisposedException e)
+        public void Close()
         {
-            Console.WriteLine("test1");
-            Console.WriteLine($"{e.Message} 에러발생");
+            Console.WriteLine(userSock.RemoteEndPoint + " 님이 접속종료했습니다.");
+            userSock.Shutdown(SocketShutdown.Both);
+            userSock.Close();
         }
-    }
+        public void SendSyncronous()
+        {
+            userSock.Send(sendBuffer);
+        }
+        public void Receive()
+        {
+            userSock.BeginReceive(receiveBuffer, 0, receiveBuffer.Length, SocketFlags.None, Program.ReceiveCallBack, this);
+        }
+        public void Send()
+        {
+            userSock.BeginSend(sendBuffer, 0, sendBuffer.Length, SocketFlags.None, Program.SendCallBack, this);
+        }
+        public void ClearSendBuffer()
+        {
+            Array.Clear(sendBuffer, 0, sendBuffer.Length);
+        }
+        public void ClearReceiveBuffer()
+        {
+            Array.Clear(receiveBuffer, 0, receiveBuffer.Length);
+        }
+        public void ClearBuffer()
+        {
+            Array.Clear(sendBuffer, 0, sendBuffer.Length);
+            Array.Clear(receiveBuffer, 0, receiveBuffer.Length);
+        }
+        public void CopySendBufFromReceiveBuf()
+        {
+            Array.Copy(receiveBuffer, sendBuffer, receiveBuffer.Length);
+        }
 
-    public void ClearSendBuffer()
-    {
-        Array.Clear(sendBuffer, 0, sendBuffer.Length);
-    }
+        // 버퍼 복사를 외부의 값으로 지정하는 함수가 필요
+        public void CopySendBufFromOtherReceiveBuf(byte[] otherBuffer)
+        {
+            Array.Copy(otherBuffer, sendBuffer, otherBuffer.Length);
+        }
 
-    public void ClearReceiveBuffer()
-    {
-        Array.Clear(receiveBuffer, 0, sendBuffer.Length);
-    }
+        // 서버와 클라이언트 둘다 디버그 연속 추적하는게 쉽지않아서? 
+        public void ShowBufferLog()
+        {
 
-    public void CopySendBufferFromReceiveBuffer()
-    {
-        Array.Copy(receiveBuffer, sendBuffer, receiveBuffer.Length);    // 이거 길이를 리시브 버퍼만큼해야되나? 둘중 짧은 길이로 해야되는거 아닌가.
-    }
-
-    public void SendSyncronous()
-    {
-        userSocket.Send(sendBuffer, 0, sendBuffer.Length, SocketFlags.None);
-    }
-
-    public void Receive()
-    {
-        userSocket.BeginReceive(receiveBuffer, 0, receiveBuffer.Length, SocketFlags.None, Chatting_1_Server.Program.ReceiveCallBack, this);
-    }
-
-    public void Send()
-    {
-        userSocket.BeginSend(sendBuffer, 0, sendBuffer.Length, SocketFlags.None, Chatting_1_Server.Program.SendCallBack, this);
-    }
-
-    public void ClearBuffer()
-    {
-        ClearReceiveBuffer();
-        ClearSendBuffer();
+        }
     }
 }

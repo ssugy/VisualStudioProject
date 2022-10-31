@@ -1,181 +1,155 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 using System.Net;
 using System.Net.Sockets;
-using System.Runtime.Remoting;
-using System.Runtime.Remoting.Messaging;
-using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
-
-namespace Chatting_1_Server
+using UserInfo;
+namespace ChattingServer_1
 {
-    internal class Program
+    public enum ePACKETTYPE
     {
-        static Socket listSocket;
-        static string strIP = "127.0.0.1";
-        static int port = 8082;
+        eWELCOME = 1000,
+        eUSERINFO
+    }
+    public struct WELCOME
+    {
+        public int userID;
+        public string message;
+    }
+    public struct USERINFO
+    {
+        public int userID;  // 서버에서 할당한 ID
+    }
 
+    class Program
+    {
+        static Socket listenSock;
+        public static string strIp = "127.0.0.1";
+        static int port = 8082;
         static Thread t1;
-        static public List<User> userList = new List<User>();
-        static byte[] revBuffer = new byte[128];
-        static byte[] sendBuffer = new byte[128];
+        static List<User> userList;
+        static bool isInterrupt;
+        static bool isInterruptMain;
         static void Main(string[] args)
         {
-            listSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-            IPEndPoint endPoint = new IPEndPoint(IPAddress.Parse(strIP), port);
-            listSocket.Bind(endPoint);
-            listSocket.Listen(100);
-
+            userList = new List<User>();
+            listenSock = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+            IPEndPoint ip = new IPEndPoint(IPAddress.Parse(strIp), port);
+            listenSock.Bind(ip);        // Ip와 port를 할당
+            Console.WriteLine("bind");
             ThreadStart threadStart = new ThreadStart(NewClient);
             t1 = new Thread(threadStart);
             t1.Start();
-
+            Console.WriteLine("쓰레드시작");
             t1.Join();
             t1.Interrupt();
         }
-
         static void NewClient()
         {
-            Console.WriteLine("클라이언트 대기중");
-            while (true)
+            while (!isInterrupt)
             {
-                listSocket.BeginAccept(AccetpCallback, null);
+                listenSock.Listen(100);                 // 소켓을 수신상태로 설정
+                listenSock.BeginAccept(AcceptCallBack, null);
                 Thread.Sleep(10);
             }
         }
-
-        public enum PACKETTYPE
+        static void AcceptCallBack(IAsyncResult ar)
         {
-            eWELCOME = 1000,
-            eCHATUSERS, // 일반 문자 보낼 때
-            eUSERINFO   // 유저 정보 보낼 때
+            Socket userSock = listenSock.EndAccept(ar);
+            User user = new User(userSock);
+            Console.WriteLine("접속한사용자 = " + userSock.RemoteEndPoint + " ID = " + userSock.Handle);
+            WelcomePacket(user);    // 안녕하세요 보내고
+            SendUserInfos(user);    // 유저 정보를 서로 보내고 받고 처리 완료
+            userList.Add(user);     // 리스트에 유저 정보를 넣고
+            user.Receive();      // 여기서부터 채팅 대기 중.
         }
-
-        // 패킷마다 구조체 필요
-        public struct WELCOME
-        {
-            public int userID;
-            public string message;
-        }
-        public struct USERINFO
-        {
-            // 서버에서 할당한 ID - 원래는 DB연동해서 회원가입하고 이런식으로 해야되는데 너무 커져서 지금 수업에서는 그렇게 안함.
-            public int userID;
-        }
-
-        // 클라이언트와 동일해야 된다.
-        // 타입별로 함수가 있으면 편하다
         static void WelcomePacket(User _user)
         {
-            // eWelcome
-            byte[] _Packet = BitConverter.GetBytes((ushort)PACKETTYPE.eWELCOME);
-            byte[] _uid = BitConverter.GetBytes((int)_user.userSocket.Handle);
-            byte[] _message = Encoding.Default.GetBytes("안녕하세요");
-            // 버퍼에 복사
-            Array.Copy(_Packet, 0, _user.sendBuffer, 0, _Packet.Length);
+            _user.ClearBuffer();
+            // eWELCOME
+            byte[] _PACKETTYPE = BitConverter.GetBytes((ushort)ePACKETTYPE.eWELCOME);
+            byte[] _uid = BitConverter.GetBytes((int)_user.userSock.Handle);
+            Console.WriteLine(BitConverter.ToInt32(_uid, 0));
+            byte[] _message = Encoding.Default.GetBytes("안녕하세요.");
+            // 버퍼에 복사 ( 이어서 ) ///////////////////////////
+            Array.Copy(_PACKETTYPE, 0, _user.sendBuffer, 0, _PACKETTYPE.Length);
             Array.Copy(_uid, 0, _user.sendBuffer, 2, _uid.Length);
             Array.Copy(_message, 0, _user.sendBuffer, 6, _message.Length);
-            _user.SendSyncronous(); // 동기로 보내기 -> 안녕하세요 보내지게 됨.
-            _user.ClearBuffer();
+            _user.SendSyncronous();
         }
-
-        //일반 문자 보내는 용도(에코기능)
-        static void SendCharcters(User user)
-        {
-            // eWelcome
-            byte[] _Packet = BitConverter.GetBytes((ushort)PACKETTYPE.eCHATUSERS);
-            byte[] _uid = BitConverter.GetBytes((int)user.userSocket.Handle);
-            // 버퍼에 복사
-            Array.Copy(_Packet, 0, user.sendBuffer, 0, _Packet.Length);
-            Array.Copy(_uid, 0, user.sendBuffer, 2, _uid.Length);
-            Array.Copy(user.receiveBuffer, 0, user.sendBuffer, 6, user.sendBuffer.Length - 6);  // 받은 메시지를 뒤에 이어서 붙이기
-            user.SendSyncronous();
-            user.ClearBuffer();
-        }
-
-        /**
-         * 이게 자신의 정보를 전달하는게 아니라, 유저에게 다른 사용자 정보를 전달하게 한다 -> 유저는 다른사용자 정보를 저장하고 있다.
-         */
         static void SendUserInfos(User _user)
         {
             _user.ClearBuffer();
-            // 1. 접속한 유저에게 다른 사람 정보를 전송해준다.
-            // 다른사람정보를 보낼 때 까지는 동기방식으로 보내라 -> 왜인지 정확히 모름.
-            foreach (User client in userList)
+            // 1. 접속한 유저에게 다른 사람 정보를 전송
+            foreach (User one in userList)
             {
-                // eWelcome
-                byte[] _packettype = BitConverter.GetBytes((ushort)PACKETTYPE.eUSERINFO);
-                byte[] _uid = BitConverter.GetBytes((int)client.userSocket.Handle);
-                // 버퍼에 복사
-                Array.Copy(_packettype, 0, _user.sendBuffer, 0, _packettype.Length);
+                // eWELCOME
+                byte[] _PACKETTYPE = BitConverter.GetBytes((ushort)ePACKETTYPE.eUSERINFO);
+                byte[] _uid = BitConverter.GetBytes((int)one.userSock.Handle);  // 접속한 유저들들의 핸들을 현재접속한 1명에게 보내는 것.
+                // 버퍼에 복사 ( 이어서 ) ///////////////////////////
+                Array.Copy(_PACKETTYPE, 0, _user.sendBuffer, 0, _PACKETTYPE.Length);
                 Array.Copy(_uid, 0, _user.sendBuffer, 2, _uid.Length);
                 _user.SendSyncronous();
             }
-
-            /**
-             * 마지막 부분은 제대로 쫓아가지 못하고 들었기 때문에, 이건 처음부터 다시 시작해야된다.
-             * 여기 프로젝트는 정상적으로 작동하지 못하는 상태로 우선 스톱하고 다시 처음부터 올라가보겠다.
-             */
-            // 2. 다른 유저에게 현재 접속한 사람을 전송 - 이거 나중에 처리
-            //foreach (User one in userList)
-            //{
-            //    byte[] _packettype = BitConverter.GetBytes((ushort)PACKETTYPE.eUSERINFO);
-            //    byte[] _uid = BitConverter.GetBytes((int)_user.userSocket.Handle);
-            //    // 버퍼에 복사
-            //    Array.Copy(_packettype, 0, one.sendBuffer, 0, _packettype.Length);
-            //    Array.Copy(_uid, 0, one.sendBuffer, 2, _uid.Length);
-            //    one.SendSyncronous();
-            //}
+            // 2. 다른유저에게 현재 접속한 사람의 정보를 전송
+            foreach (User one in userList)
+            {
+                byte[] _PACKETTYPE = BitConverter.GetBytes((ushort)ePACKETTYPE.eUSERINFO);
+                byte[] _uid = BitConverter.GetBytes((int)_user.userSock.Handle);    // 현재 접속한 1명의 핸들을 여러 사람에게 보내기
+                Array.Copy(_PACKETTYPE, 0, one.sendBuffer, 0, _PACKETTYPE.Length);
+                Array.Copy(_uid, 0, one.sendBuffer, 2, _uid.Length);
+                one.SendSyncronous();
+            }
         }
 
-        private static void AccetpCallback(IAsyncResult ar)
-        {
-            Socket client = listSocket.EndAccept(ar);
-            Console.WriteLine($"유저가 접속했습니다. {client.RemoteEndPoint}");
-            User user = new User(client);
-            userList.Add(user);
+        // 강사님은 여기서 패킷파서함수를 새로 만들어서 사용하심 - 나는 해당내용을 리시브콜백에 넣음.
 
-            // 안녕하세요 메시지 보내기
-            WelcomePacket(user);    // 동기방식으로 "안녕하세요" 보냄. -> 거기서 끝
-            SendUserInfos(user);
-            user.Receive();
-        }
 
-        internal static void SendCallBack(IAsyncResult ar)
+        public static void ReceiveCallBack(IAsyncResult ar)
         {
             User user = (User)ar.AsyncState;
             try
             {
-                user.Receive();
+                foreach (User one in userList)
+                {
+                    // 대화 메시지를 다른 사람들에게 모두 보내기.
+                    one.CopySendBufFromOtherReceiveBuf(user.receiveBuffer);
+                    byte[] uid = BitConverter.GetBytes((int)one.userSock.Handle);
+                    Array.Copy(uid, 0, one.sendBuffer, 2, uid.Length); // Uid변경.
+                    Console.WriteLine("아이디 " + BitConverter.ToInt32(uid, 0));
+                    one.SendSyncronous();   //강사님이 이게 비동기가 맞다고 이야기하시니까 한번 바꿔보겠음 -> 안바꾸는걸로 함
+                    //one.Send();       //비동기로 바꾸면 문제는 없지만, 종료되는 행위가 반복되는 부분이 있음. 이게 라우터를 여러개 거치면 중간에 반복되서 종료되는게 있음. 이게 에러는 없지만 별로같아서 동기로 바꿈
+                }
+                SendCallBack(ar);   // 여기서 유저 실행을 이어줌
             }
-            catch (SocketException)
+            catch (SocketException e)
             {
-                if (userList.Contains(user))
+                try
                 {
                     userList.Remove(user);
+                    user.Close();
+                }
+                catch (ObjectDisposedException)
+                {
+                    //중간에 접속 종료하면, 라우터를 여러개 거치면서 여러번 실행된다.
                 }
             }
-            catch (ObjectDisposedException)
-            {
-
-            }
         }
-
-        internal static void ReceiveCallBack(IAsyncResult ar)
+        public static void SendCallBack(IAsyncResult ar)
         {
             User user = (User)ar.AsyncState;
             try
             {
-                SendCharcters(user);    //에코기능 - 정상작동함
+                user.ClearSendBuffer();
+                user.Receive();
             }
-            catch (SocketException)
-            {   
-            }
-            catch (ObjectDisposedException)
+            catch (SocketException e)
             {
-
+                userList.Remove(user);
+                user.Close();
             }
         }
     }
