@@ -36,17 +36,26 @@ namespace UserInfo
             userSock.Shutdown(SocketShutdown.Both);
             userSock.Close();
         }
+        
+        // 소켓익셉션에 로그찍으면 너무많이 나와서 우선 안찍음
         public void SendSyncronous()
         {
-            userSock.Send(sendBuffer);
+            try
+            {
+                userSock.Send(sendBuffer);
+            }
+            catch (SocketException)
+            {
+
+            }
         }
         public void Receive()
         {
-            userSock.BeginReceive(receiveBuffer, 0, receiveBuffer.Length, SocketFlags.None, Program.ReceiveCallBack, this);
+            userSock.BeginReceive(receiveBuffer, 0, receiveBuffer.Length, SocketFlags.None, ChattingServer.ReceiveCallBack, this);
         }
         public void Send()
         {
-            userSock.BeginSend(sendBuffer, 0, sendBuffer.Length, SocketFlags.None, Program.SendCallBack, this);
+            userSock.BeginSend(sendBuffer, 0, sendBuffer.Length, SocketFlags.None, ChattingServer.SendCallBack, this);
         }
         public void ClearSendBuffer()
         {

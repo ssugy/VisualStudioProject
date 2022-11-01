@@ -33,7 +33,7 @@ namespace ChattingClient_1
         public string message;
     }
 
-    class Program
+    class ChattingClient
     {
         //        static Socket userSock;
         static string strIp = "127.0.0.1";
@@ -67,10 +67,8 @@ namespace ChattingClient_1
             {
                 userMessage = Console.ReadLine();
                 byte[] _packetType = BitConverter.GetBytes((ushort)ePACKETTYPE.eUSERCHAT);
-                //byte[] _uid = BitConverter.GetBytes((int)user.userSock.Handle);
                 byte[] msg = Encoding.Default.GetBytes(userMessage);
                 Array.Copy(_packetType, 0, user.sendBuffer, 0, _packetType.Length);
-                //Array.Copy(_uid, 0, user.sendBuffer, 2, _uid.Length);
                 Array.Copy(msg, 0, user.sendBuffer, 6, msg.Length);
                 user.Send();    // 입력한 메시지를 서버로 전송 (그냥 send하는게 아니라 패킷타입을 넣어줘야된다.)
                 user.ClearSendBuffer();
@@ -113,7 +111,7 @@ namespace ChattingClient_1
                         int uid = BitConverter.ToInt32(_uid, 0);                 // 서버에서 할당한 자신의 ID
                         User other = new User(uid);
                         userList.Add(other);
-                        Console.WriteLine(uid + " 님의 정보를 수신했습니다.");
+                        //Console.WriteLine(uid + " 님의 정보를 수신했습니다.");   -- 스트레스 테스트때문에 임시로 꺼둠
                     }
                     break;
                 case (int)ePACKETTYPE.eUSERCHAT:

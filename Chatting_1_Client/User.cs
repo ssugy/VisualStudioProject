@@ -39,11 +39,11 @@ namespace UserInfo
         }
         public void Receive()
         {
-            userSock.BeginReceive(receiveBuffer, 0, receiveBuffer.Length, SocketFlags.None, Program.ReceiveCallBack, this);
+            userSock.BeginReceive(receiveBuffer, 0, receiveBuffer.Length, SocketFlags.None, ChattingClient.ReceiveCallBack, this);
         }
         public void Send()
         {
-            userSock.BeginSend(sendBuffer, 0, sendBuffer.Length, SocketFlags.None, Program.SendCallBack, this);
+            userSock.BeginSend(sendBuffer, 0, sendBuffer.Length, SocketFlags.None, ChattingClient.SendCallBack, this);
         }
         public void ClearSendBuffer()
         {
