@@ -5,7 +5,7 @@ using System.Text;
 
 namespace TestGround_Client
 {
-    internal class Program
+    internal class TestGround_Client
     {
         static Socket serverSock = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
         static string strIP = "127.0.0.1";
@@ -19,13 +19,7 @@ namespace TestGround_Client
 
             while (true)
             {
-                byte[] revBuffer = new byte[128];
-                byte[] sendBuffer = new byte[128];
-                serverSock.Receive(revBuffer);
-                Console.WriteLine(Encoding.Default.GetString(revBuffer));
-                string message = Console.ReadLine();
-                sendBuffer = Encoding.Default.GetBytes(message);
-                serverSock.Send(sendBuffer);
+               
             }
         }
     }

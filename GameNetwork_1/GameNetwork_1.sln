@@ -33,7 +33,9 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chatting_1_Server", "..\Cha
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "P2P_1_Server", "..\P2P_1_Server\P2P_1_Server.csproj", "{34BAD8C3-88FD-40BD-A130-4DC68C8E16B6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chatting_1_ProcessChecker", "..\Chatting_1_ProcessChecker\Chatting_1_ProcessChecker.csproj", "{5F8B489B-CC88-4E9D-B8FA-979166A8A2E2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Chatting_1_ProcessChecker", "..\Chatting_1_ProcessChecker\Chatting_1_ProcessChecker.csproj", "{5F8B489B-CC88-4E9D-B8FA-979166A8A2E2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestBasic_Enum", "..\TestBasic_Enum\TestBasic_Enum.csproj", "{2AB84C17-F246-44B0-AE64-CEED94685A03}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -105,6 +107,10 @@ Global
 		{5F8B489B-CC88-4E9D-B8FA-979166A8A2E2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5F8B489B-CC88-4E9D-B8FA-979166A8A2E2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5F8B489B-CC88-4E9D-B8FA-979166A8A2E2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2AB84C17-F246-44B0-AE64-CEED94685A03}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2AB84C17-F246-44B0-AE64-CEED94685A03}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2AB84C17-F246-44B0-AE64-CEED94685A03}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2AB84C17-F246-44B0-AE64-CEED94685A03}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
