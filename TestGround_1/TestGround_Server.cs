@@ -26,6 +26,14 @@ namespace TestGround_Server
                 Socket client = serverSocket.Accept();
 
             }
+
+            //
+
+            Socket client2 = serverSocket.Accept();
+
+            byte[] data = Encoding.Default.GetBytes("안녕하세요");
+
+            client2.Send(data);
         }
     }
 }

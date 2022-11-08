@@ -146,7 +146,7 @@ namespace ChattingServer_1
                 }
                 SendCallBack(ar);   // 여기서 유저 실행을 이어줌
             }
-            catch (SocketException e)
+            catch (SocketException)
             {
                 try
                 {

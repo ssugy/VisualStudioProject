@@ -46,12 +46,13 @@ namespace GameNetwork_1
             Console.WriteLine("1. ip를 문자열로 표현 : " + ip1);
 
             // 4. ip를 byte배열로 표현 - 생성자로 바로 변환
-            byte[] byIP = new byte[] { 172, 30, 1, 16 };
+            byte[] byIP = new byte[] { 192, 168, 0, 1 };
             IPAddress ip2 = new IPAddress(byIP);
             Console.WriteLine("2. ip를 byte 배열로 표현 :" + ip2);
 
             // 5. 바이트 배열을 long값으로 표현
-            uint IAddress = BitConverter.ToUInt32(byIP, 0);
+            //uint IAddress = BitConverter.ToUInt32(byIP, 0);
+            long IAddress = BitConverter.ToInt32(byIP, 0);
             Console.WriteLine("3. ip를 long값으로 표현 : " + IAddress);
             IPAddress ip3 = new IPAddress((long)IAddress);
             Console.WriteLine("3-1. 바이트배열을 Long으로 변환 후 다시 IP : " + ip3);
