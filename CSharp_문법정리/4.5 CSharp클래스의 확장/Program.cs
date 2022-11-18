@@ -14,13 +14,13 @@
 
         public class Head
         {
-            //test233322ㅇㅇㅇ
+            
         }
     }
 
     internal class Program
     {
-        static void Main(string[] args)
+        static void _Main(string[] args)
         {
             HardDisk.Head head = new HardDisk.Head();  
         }
