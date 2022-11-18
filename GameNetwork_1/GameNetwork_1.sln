@@ -43,7 +43,11 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "C++_BitField_Example", "..\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "시험용도", "..\시험용도\시험용도.csproj", "{D76A2B0C-329F-4A6A-89EF-918E3FACCB37}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CallBack_Sample", "..\CallBack_Sample\CallBack_Sample.csproj", "{340C38DA-6E0D-44C6-A6EC-39028E9C1381}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CallBack_Sample", "..\CallBack_Sample\CallBack_Sample.csproj", "{340C38DA-6E0D-44C6-A6EC-39028E9C1381}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "CSharp_문법정리", "CSharp_문법정리", "{810B6302-E688-446A-A85A-5E0DE581D727}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "4.5 CSharp클래스의 확장", "..\CSharp_문법정리\4.5 CSharp클래스의 확장\4.5 CSharp클래스의 확장.csproj", "{72330A28-616F-4A6D-8CAE-2100527614FD}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -307,9 +311,24 @@ Global
 		{340C38DA-6E0D-44C6-A6EC-39028E9C1381}.Release|x64.Build.0 = Release|Any CPU
 		{340C38DA-6E0D-44C6-A6EC-39028E9C1381}.Release|x86.ActiveCfg = Release|Any CPU
 		{340C38DA-6E0D-44C6-A6EC-39028E9C1381}.Release|x86.Build.0 = Release|Any CPU
+		{72330A28-616F-4A6D-8CAE-2100527614FD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{72330A28-616F-4A6D-8CAE-2100527614FD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{72330A28-616F-4A6D-8CAE-2100527614FD}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{72330A28-616F-4A6D-8CAE-2100527614FD}.Debug|x64.Build.0 = Debug|Any CPU
+		{72330A28-616F-4A6D-8CAE-2100527614FD}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{72330A28-616F-4A6D-8CAE-2100527614FD}.Debug|x86.Build.0 = Debug|Any CPU
+		{72330A28-616F-4A6D-8CAE-2100527614FD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{72330A28-616F-4A6D-8CAE-2100527614FD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{72330A28-616F-4A6D-8CAE-2100527614FD}.Release|x64.ActiveCfg = Release|Any CPU
+		{72330A28-616F-4A6D-8CAE-2100527614FD}.Release|x64.Build.0 = Release|Any CPU
+		{72330A28-616F-4A6D-8CAE-2100527614FD}.Release|x86.ActiveCfg = Release|Any CPU
+		{72330A28-616F-4A6D-8CAE-2100527614FD}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{72330A28-616F-4A6D-8CAE-2100527614FD} = {810B6302-E688-446A-A85A-5E0DE581D727}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {BAF2F8E0-D1F9-4320-9304-996082367A23}
