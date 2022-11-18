@@ -20,8 +20,6 @@
 
     internal class Program
     {
-        
-
         static void Main(string[] args)
         {
             HardDisk.Head head = new HardDisk.Head();  
