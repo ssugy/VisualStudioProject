@@ -47,7 +47,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CallBack_Sample", "..\CallB
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "CSharp_문법정리", "CSharp_문법정리", "{810B6302-E688-446A-A85A-5E0DE581D727}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "4.5 CSharp클래스의 확장", "..\CSharp_문법정리\4.5 CSharp클래스의 확장\4.5 CSharp클래스의 확장.csproj", "{72330A28-616F-4A6D-8CAE-2100527614FD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "4_5 CSharp클래스의 확장", "..\CSharp_문법정리\4.5 CSharp클래스의 확장\4_5 CSharp클래스의 확장.csproj", "{72330A28-616F-4A6D-8CAE-2100527614FD}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -37,7 +37,7 @@ namespace _4._5_CSharp클래스의_확장
 
     internal class 인터페이스
     {
-        static void Main()
+        static void _Main()
         {
             NoteBook noteBook = new NoteBook();
             IMonitor moitor = noteBook as IMonitor;
