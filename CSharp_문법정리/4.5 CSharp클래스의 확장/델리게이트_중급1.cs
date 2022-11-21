@@ -51,7 +51,7 @@ namespace _4._5_CSharp클래스의_확장
     {
         delegate void WorkDelegate(char a, int c, int d);
 
-        static void Main()
+        static void _Main()
         {
             Mathematics mathematics= new Mathematics();
             WorkDelegate work = mathematics.Calculate;
