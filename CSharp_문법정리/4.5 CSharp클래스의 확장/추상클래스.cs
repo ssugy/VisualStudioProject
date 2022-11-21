@@ -51,7 +51,7 @@ namespace _4._5_CSharp클래스의_확장
 
     internal class 추상클래스
     {
-        static void Main()
+        static void _Main()
         {
             DrawingObject line = new Line(new Point(10, 10), new Point(20, 20));
             line.Draw();    // 다형성에 따라 Line.Draw호출됨.    - 굳이 다형성으로 이렇게 작성할 이유가있나
