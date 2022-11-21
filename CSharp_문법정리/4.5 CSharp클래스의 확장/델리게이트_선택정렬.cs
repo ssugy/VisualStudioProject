@@ -52,7 +52,7 @@ namespace _4._5_CSharp클래스의_확장
 
     internal class 델리게이트_선택정렬
     {
-        static void Main()
+        static void _Main()
         {
             int[] intArray = new int[] { 5, 2 , 3, 1, 7};
 
