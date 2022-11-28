@@ -9,7 +9,7 @@ namespace MysqlDB
     internal class BJ1000
     {
         // 두 정수 a와 b를 입력받은 다음 두수의 합을 출력 
-         public static void Main()
+         public static void _Main()
         {
             while (true)
             {

@@ -2,7 +2,7 @@
 
 namespace MysqlDB
 {
-    internal class Program
+    internal class MySQL_01
     {
         static void _Main(string[] args)
         {
